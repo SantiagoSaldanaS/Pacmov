@@ -55,3 +55,57 @@ Pacmov/
 │   └── layouts/           # Archivos de mapas (.lay)
 ├── .gitignore
 └── README.md
+```
+
+## Uso
+
+La ejecución del agente se realiza con `markov.py`, el cual procesa los parámetros de configuración y levanta la simulación sin alterar o modificar los archivos originales de Berkeley.
+
+### Sintaxis base
+
+```bash
+python markov.py [opciones]
+```
+
+---
+
+### Casos de uso comunes
+
+* **Laberinto pequeño:**
+  ```bash
+  python markov.py -l smallClassic
+  ```
+
+* **Laberinto mediano:**
+  ```bash
+  python markov.py -l mediumClassic
+  ```
+
+* **Laberinto completo:**
+  ```bash
+  python markov.py -l originalClassic --frame_time 0
+  ```
+
+* **Evaluación estadística / Benchmark (10 partidas sin interfaz gráfica):**
+  ```bash
+  python markov.py -l mediumClassic -n 10 -q
+  ```
+
+* **Ajuste de escala de ventana (Zoom para pantallas de alta resolución):**
+  ```bash
+  python markov.py -l smallClassic --zoom 2.0
+  ```
+
+---
+
+### Parámetros y banderas disponibles
+
+| Bandera | Descripción | Valores por defecto / Ejemplos |
+| :--- | :--- | :--- |
+| `-l`, `--layout` | Define el laberinto a cargar desde `layouts/` | `smallClassic`, `mediumClassic`, `originalClassic` |
+| `--frame_time` | Tiempo de espera en segundos entre cada cuadro de animación | `0.1` (defecto), `0.02` (recomendado), `0` (instantáneo) |
+| `-n`, `--num_games` | Número de partidas consecutivas a simular | `1` (defecto), ej. `-n 20` |
+| `-q`, `--quiet_graphics` | Suprime la interfaz gráfica y solo imprime estadísticas finales | Flag booleano |
+| `-z`, `--zoom` | Factor de escala para el renderizado del tablero | `1.0` (defecto), `1.5`, `2.0` |
+| `-g`, `--ghosts` | Clase de comportamiento de los fantasmas rivales | `RandomGhost`, `DirectionalGhost` |
+| `-k`, `--num_ghosts` | Sobrescribe la cantidad de fantasmas en tableros compatibles | Entero (ej. `-k 2`) |
