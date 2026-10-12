@@ -2,8 +2,14 @@
 
 Implementación de un agente inteligente para el entorno de simulación de Pacman (utilizando las bases de UC Berkeley CS188) basado en Cadenas de Markov de Tiempo Discreto y optimización mediante el criterio del valor esperado.
 
+* Santiago Saldaña Subías A01708446
+* Diego Perea León A01708350
+* Felipe Pacheco Zamorano A01713238
+* Alejandro Flores Martínez A01708363
 
-Santiago Saldaña Subías A01708446 \ Diego Perea León A01708350 \ Felipe Pacheco Zamorano A
+<p align="center">
+  <img src="pacmov.png" alt="Pacmov" width="500">
+</p>
 
 ---
 
