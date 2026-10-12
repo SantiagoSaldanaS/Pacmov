@@ -310,8 +310,6 @@ class MarkovAgent(Agent):
         return best_action
 
             
-
-
 if __name__ == '__main__':
 
     # Debemos de registrar el agente sin tocar multiagent.
