@@ -102,13 +102,13 @@ python markov.py [opciones]
 
 | Bandera | Descripción | Valores por defecto / Ejemplos |
 | :--- | :--- | :--- |
-| `-l`, `--layout` | Define el laberinto a cargar desde `layouts/` | `smallClassic`, `mediumClassic`, `originalClassic` |
-| `--frame_time` | Tiempo de espera en segundos entre cada cuadro de animación | `0.1` (defecto), `0.02` (recomendado), `0` (instantáneo) |
-| `-n`, `--num_games` | Número de partidas consecutivas a simular | `1` (defecto), ej. `-n 20` |
-| `-q`, `--quiet_graphics` | Suprime la interfaz gráfica y solo imprime estadísticas finales | Flag booleano |
-| `-z`, `--zoom` | Factor de escala para el renderizado del tablero | `1.0` (defecto), `1.5`, `2.0` |
-| `-g`, `--ghosts` | Clase de comportamiento de los fantasmas rivales | `RandomGhost`, `DirectionalGhost` |
-| `-k`, `--num_ghosts` | Sobrescribe la cantidad de fantasmas en tableros compatibles | Entero (ej. `-k 2`) |
+| `-l`, `--layout` | Define el laberinto a cargar desde `layouts/`. | `smallClassic`, `mediumClassic`, `originalClassic` |
+| `--frame_time` | Tiempo de espera en segundos entre cada cuadro de animación. Se recomienda default en small y medium y 0 en original. | `0.1`, `0.02`, `0` (instantáneo) |
+| `-n`, `--num_games` | Número de partidas consecutivas a simular. | `1` (defecto), ej. `-n 20` |
+| `-q`, `--quiet_graphics` | Suprime la interfaz gráfica y solo imprime estadísticas finales. | Flag booleano |
+| `-z`, `--zoom` | Factor de escala para el renderizado del tablero. | `1.0` (defecto), `1.5`, `2.0` |
+| `-g`, `--ghosts` | Clase de comportamiento de los fantasmas rivales. | `RandomGhost`, `DirectionalGhost` |
+| `-k`, `--num_ghosts` | Sobrescribe la cantidad de fantasmas en tableros compatibles. | Entero (ej. `-k 2`) |
 
 
 
