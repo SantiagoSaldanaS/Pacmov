@@ -1,0 +1,57 @@
+# Pacmov: Agente Autónomo de Pacman utilizando Cadenas de Markov
+
+Implementación de un agente inteligente para el entorno de simulación de Pacman (utilizando las bases de UC Berkeley CS188) basado en Cadenas de Markov de Tiempo Discreto y optimización mediante el criterio del valor esperado.
+
+---
+
+El agente modela el entorno como un proceso estocástico discreto para predecir el comportamiento dinámico de los fantasmas y tomar decisiones óptimas de navegación bajo incertidumbre.
+
+### Espacio de Estados ($S$)
+Discretizamos el mapa descartando muros y obstáculos. Cada celda transitable $(x, y)$ se mapea a un estado discreto $i \in \{0, 1, \dots, N-1\}$, donde:
+$$\vert{}S\vert{} = N$$
+
+### Matriz de Probabilidad de Transición ($P$)
+Modelamos el movimiento aleatorio de los fantasmas, para cada estado $i$ con $k_i$ vecinos transitables accesibles en una dirección cardinal (N, S, E y O). La probabilidad de transición a un estado vecino $j$ es uniforme:
+$$P_{ij} = \mathbb{P}(X_{t+1} = j \mid X_t = i) = \frac{1}{k_i}$$
+
+Si un estado $i$ no posee transiciones libres, se modela como un estado absorbente ($P_{ii} = 1$), donde:
+$$\sum_{j \in S} P_{ij} = 1, \quad \forall i \in S$$
+
+### Proyecciones Temporales (Chapman-Kolmogorov)
+Para estimar la densidad de probabilidad espacial de los fantasmas en el futuro $m \in \{1, 2, 3\}$, aplicamos las ecuaciones de Chapman-Kolmogorov:
+$$P_{ij}^{(m)} = \left(P^m\right)_{ij}$$
+
+Precomputamos las potencias $P^2$ y $P^3$ al inicializar el juego mediante álgebra matricial vectorizada (`numpy`) (para reducir el costo computacional durante el ciclo de ejecución real).
+
+### Matriz BFS
+Al inicio se planteó utilizar la distancia Manhattan, sin embargo esta no consideraba paredes. Para evitar mínimos locales, calculamos la distancia mínima real sobre el grafo de adyacencia de $P$:
+$$d(i, j) = \text{camino más corto de } i \text{ a } j \text{ sobre } S$$
+Utilizamos Breadth-First Search (BFS) para calcular todos los pares de estados en la etapa de preprocesamiento ($O(\vert{}S\vert{} \cdot (\vert{}V\vert{} + \vert{}E\vert{}))$).
+
+### Función de Utilidad y Valor Esperado ($\mathbb{E}[U]$)
+Para cada acción legal $a \in \mathcal{A}$, el agente simula el estado sucesor y selecciona la acción que maximiza el valor esperado:
+$$a^* = \arg\max_{a \in \mathcal{A}} \mathbb{E}[U(s')]$$
+
+La función de utilidad descompone recompensa y riesgo estocástico:
+$$\mathbb{E}[U(s')] = R_{\text{inmediata}}(s') - \alpha \cdot d(s', \text{comida}) + R_{\text{cápsula}}(s') + \mathbb{E}[\text{Riesgo}(s')]$$
+
+* Riesgo Estocástico: Ponderación temporal de colisión con fantasmas activos:
+  $$\mathbb{E}[\text{Riesgo}(s')] = C_{\text{muerte}} \sum_{g \in G_{\text{peligro}}} \left( P_{g, s'} + \gamma P^2_{g, s'} + \gamma^2 P^3_{g, s'} \right)$$
+* Caza de Fantasmas Vulnerables: Cuando $\text{scared\_timer} > 3$, (la duración del poder es mayor a 3) el costo de colisión se invierte en una recompensa estocástica positiva.
+
+---
+
+## Estructura del Repositorio
+
+El diseño desacopla la lógica algorítmica matemática del motor gráfico de simulación de Berkeley:
+
+```text
+Pacmov/
+│
+├── markov.py              # Agente estocástico autónomo y toma de decisiones (aporte real, todo lo demás ya estaba hecho)
+├── multiagent/            # Motor de simulación y layouts (UC Berkeley CS188)
+│   ├── pacman.py          # Bucle principal de ejecución del juego
+│   ├── game.py            # Definición de entidades, agentes y tableros
+│   └── layouts/           # Archivos de mapas (.lay)
+├── .gitignore
+└── README.md
