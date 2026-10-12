@@ -15,6 +15,7 @@ import numpy as np
 from game import Agent
 import pacman
 from collections import deque
+import multi_agents
 
 
 # Para adaptar el repositorio a nuestro uso, debemos de adaptar dos comandos.
@@ -313,7 +314,6 @@ class MarkovAgent(Agent):
 if __name__ == '__main__':
 
     # Debemos de registrar el agente sin tocar multiagent.
-    import multi_agents
     multi_agents.MarkovAgent = MarkovAgent
 
     # Inyectamos nuestro agente por defecto para que -q no asuma KeyboardAgent.
