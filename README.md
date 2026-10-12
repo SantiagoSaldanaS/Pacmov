@@ -109,3 +109,17 @@ python markov.py [opciones]
 | `-z`, `--zoom` | Factor de escala para el renderizado del tablero | `1.0` (defecto), `1.5`, `2.0` |
 | `-g`, `--ghosts` | Clase de comportamiento de los fantasmas rivales | `RandomGhost`, `DirectionalGhost` |
 | `-k`, `--num_ghosts` | Sobrescribe la cantidad de fantasmas en tableros compatibles | Entero (ej. `-k 2`) |
+
+
+
+## Resultados
+
+Usando una muestra de 100 partidas consecutivas en el entorno más difícil (originalClassic):
+
+| Métrica | Valor Obtenido |
+| :--- | :--- |
+| **Partidas Evaluadas** | 100 |
+| **Victorias / Derrotas** | 87 / 13 |
+| **Tasa de Victoria (Win Rate)** | **87.0%** |
+| **Puntaje Máximo** | 4,057 pts |
+| **Puntaje Promedio Estimado** | ~2,890 pts |
