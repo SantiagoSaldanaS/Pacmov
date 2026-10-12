@@ -119,7 +119,7 @@ Usando una muestra de 100 partidas consecutivas en el entorno más difícil (ori
 | Métrica | Valor Obtenido |
 | :--- | :--- |
 | **Partidas Evaluadas** | 100 |
-| **Victorias / Derrotas** | 87 / 13 |
-| **Tasa de Victoria (Win Rate)** | **87.0%** |
+| **Tasa de Victoria** | **87.0%** |
 | **Puntaje Máximo** | 4,057 pts |
 | **Puntaje Promedio Estimado** | ~2,890 pts |
+| **Puntaje Mínimo** | **40.0 pts** |
