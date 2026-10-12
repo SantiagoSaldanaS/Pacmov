@@ -1,3 +1,12 @@
+'''
+
+Santiago Saldaña Subías A01708446
+Diego Perea León A01708350
+Felipe Pacheco Zamorano A01713238
+Alejandro Flores Martínez A01708363
+
+'''
+
 
 import os
 import sys
