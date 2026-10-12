@@ -316,13 +316,16 @@ if __name__ == '__main__':
     import multi_agents
     multi_agents.MarkovAgent = MarkovAgent
 
+    # Inyectamos nuestro agente por defecto para que -q no asuma KeyboardAgent.
+    cli_args = sys.argv[1:]
+    if '-p' not in cli_args and '--pacman' not in cli_args:
+        cli_args = ['-p', 'MarkovAgent'] + cli_args
 
     # Leemos los comandos y argumentos de la terminal.
-    args = read_command(sys.argv[1:])
+    args = read_command(cli_args)
 
-    # Asignamos el agente a la partida
-
+    # Asignamos el agente a la partida.
     args['pacman'] = MarkovAgent()
 
-    # Arrancamos el simulador gráfico
+    # Simulador.
     run_games(**args)
