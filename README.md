@@ -2,6 +2,9 @@
 
 Implementación de un agente inteligente para el entorno de simulación de Pacman (utilizando las bases de UC Berkeley CS188) basado en Cadenas de Markov de Tiempo Discreto y optimización mediante el criterio del valor esperado.
 
+
+Santiago Saldaña Subías A01708446 \ Diego Perea León A01708350 \ Felipe Pacheco Zamorano A
+
 ---
 
 El agente modela el entorno como un proceso estocástico discreto para predecir el comportamiento dinámico de los fantasmas y tomar decisiones óptimas de navegación bajo incertidumbre.
@@ -43,12 +46,12 @@ $$\mathbb{E}[U(s')] = R_{\text{inmediata}}(s') - \alpha \cdot d(s', \text{comida
 
 ## Estructura del Repositorio
 
-El diseño desacopla la lógica algorítmica matemática del motor gráfico de simulación de Berkeley:
+El diseño del modelo es independiente del motor gráfico de simulación de Berkeley (el aporte principal está en markov.py, el resto no es obra propia):
 
 ```text
 Pacmov/
 │
-├── markov.py              # Agente estocástico autónomo y toma de decisiones (aporte real, todo lo demás ya estaba hecho)
+├── markov.py              # Agente estocástico autónomo y toma de decisiones
 ├── multiagent/            # Motor de simulación y layouts (UC Berkeley CS188)
 │   ├── pacman.py          # Bucle principal de ejecución del juego
 │   ├── game.py            # Definición de entidades, agentes y tableros
@@ -100,7 +103,7 @@ python markov.py [opciones]
 
 ### Parámetros y banderas disponibles
 
-| Bandera | Descripción | Valores por defecto / Ejemplos |
+| Flag | Descripción | Valores por defecto / Ejemplos |
 | :--- | :--- | :--- |
 | `-l`, `--layout` | Define el laberinto a cargar desde `layouts/`. | `smallClassic`, `mediumClassic`, `originalClassic` |
 | `--frame_time` | Tiempo de espera en segundos entre cada cuadro de animación. Se recomienda default en small y medium y 0 en original. | `0.1`, `0.02`, `0` (instantáneo) |
