@@ -37,7 +37,7 @@ $$\mathbb{E}[U(s')] = R_{\text{inmediata}}(s') - \alpha \cdot d(s', \text{comida
 
 * Riesgo Estocástico: Ponderación temporal de colisión con fantasmas activos:
   $$\mathbb{E}[\text{Riesgo}(s')] = C_{\text{muerte}} \sum_{g \in G_{\text{peligro}}} \left( P_{g, s'} + \gamma P^2_{g, s'} + \gamma^2 P^3_{g, s'} \right)$$
-* Caza de Fantasmas Vulnerables: Cuando $\text{scared\_timer} > 3$, (la duración del poder es mayor a 3) el costo de colisión se invierte en una recompensa estocástica positiva.
+* Caza de Fantasmas Vulnerables: Cuando `scared_timer > 3`, (la duración del poder es mayor a 3) el costo de colisión se invierte en una recompensa estocástica positiva.
 
 ---
 
