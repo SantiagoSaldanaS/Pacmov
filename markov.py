@@ -14,6 +14,8 @@ os.chdir(MULTIAGENT_DIR)
 import numpy as np
 from game import Agent
 import pacman
+from collections import deque
+
 
 # Para adaptar el repositorio a nuestro uso, debemos de adaptar dos comandos.
 read_command = getattr(pacman, 'read_command', getattr(pacman, 'readCommand', None))
@@ -123,6 +125,32 @@ class MarkovAgent(Agent):
         self.P2 = np.linalg.matrix_power(self.P, 2)
         self.P3 = np.linalg.matrix_power(self.P, 3)
 
+        # Al inicio ibamos a usar la distancia Manhattan para calcular distancias de comidas y poderes, sin
+        # embargo debido a lo que se explica más adelante esto no es óptimo, por lo que implementaremos BFS.
+        
+        self.distance_matrix = np.full((N, N), np.inf)  # Inicializamos la matriz NxN con infinitos (máx penalización).
+        # La matriz [i, j] en si va a representar el número mínimo de pasos que toma llegar de i a j.
+
+        # Iteramos tomando cada punto como salida.
+        for start in range(N):  
+
+            # Calculamos las distancias de todas las casillas  comparadas a todas las demás.
+            self.distance_matrix[start, start] = 0  # La distancia de una casilla contra si misma es 0.
+            queue = deque([start])  # Usamos cola FIFO para hacer el BFS que garantiza encontrar el óptimo.
+
+            while queue:
+                u = queue.popleft()
+
+                # Buscamos a los vecinos conectados usando la matriz de markov P.
+                for v in np.where(self.P[u] > 0)[0]:  # Checamos los vecinos donde hay una prob de transición desde u.
+
+                    if self.distance_matrix[start, v] == np.inf:  
+                        # Si no se había visitado la casilla v, el camino actual será el más corto. Ergo su distancia es
+                        # la anterior más 1 paso.
+
+                        self.distance_matrix[start, v] = self.distance_matrix[start, u] + 1
+                        queue.append(v)
+
 
     def get_action(self, gameState):
 
@@ -217,13 +245,28 @@ class MarkovAgent(Agent):
             # Recompensa inmediata.
             reward_score = successor.get_score() - gameState.get_score()  # Calculamos la diff entre el score anterior y el nuevo posible.
 
-            # Para fomentar que el agente vaya hacia direcciones donde hay comida, podemos calcularla distancia Manhattan a la 
-            # comida más cercana (no se puede usar euclidiana al ser un entorno cuadriculado).
+            # P̶a̶r̶a̶ ̶f̶o̶m̶e̶n̶t̶a̶r̶ ̶q̶u̶e̶ ̶e̶l̶ ̶a̶g̶e̶n̶t̶e̶ ̶v̶a̶y̶a̶ ̶h̶a̶c̶i̶a̶ ̶d̶i̶r̶e̶c̶c̶i̶o̶n̶e̶s̶ ̶d̶o̶n̶d̶e̶ ̶h̶a̶y̶ ̶c̶o̶m̶i̶d̶a̶,̶ ̶p̶o̶d̶e̶m̶o̶s̶ ̶c̶a̶l̶c̶u̶l̶a̶r̶l̶a̶ ̶d̶i̶s̶t̶a̶n̶c̶i̶a̶ ̶M̶a̶n̶h̶a̶t̶t̶a̶n̶ ̶a̶ ̶l̶a̶ ̶
+            # c̶o̶m̶i̶d̶a̶ ̶m̶á̶s̶ ̶c̶e̶r̶c̶a̶n̶a̶ ̶(̶n̶o̶ ̶s̶e̶ ̶p̶u̶e̶d̶e̶ ̶u̶s̶a̶r̶ ̶e̶u̶c̶l̶i̶d̶i̶a̶n̶a̶ ̶a̶l̶ ̶s̶e̶r̶ ̶u̶n̶ ̶e̶n̶t̶o̶r̶n̶o̶ ̶c̶u̶a̶d̶r̶i̶c̶u̶l̶a̶d̶o̶)̶.̶
+
+            # No podemos usar distancia Manhattan debido a que esta no toma en cuenta paredes (es decir, no toma en cuenta que a veces
+            # para llegar al objetivo debe de incrementar la distancia hacia la meta). Por esto modificamos el código para utilizar BFS y
+            # así calcular la distancia real sobre los caminos del grafo.
 
             food_list = successor.get_food().as_list()  # Obtenemos una lista con toda la comida.
 
-            # Usamos fórmula  Manhattan.
-            minimum_dist = min((abs(new_pos[0] - fx) + abs(new_pos[1] - fy) for fx, fy in food_list), default=0)
+            # U̶s̶a̶m̶o̶s̶ ̶f̶ó̶r̶m̶u̶l̶a̶ ̶M̶a̶n̶h̶a̶t̶t̶a̶n̶.̶
+            # minimum_dist = min((abs(new_pos[0] - fx) + abs(new_pos[1] - fy) for fx, fy in food_list), default=0)
+            
+            # Distancia real sobre los caminos del laberinto usando la matriz BFS previamente calculada.
+            minimum_dist = min(
+                (self.distance_matrix[new_idx, self.pos_to_idx[(fx, fy)]]
+                for fx, fy in food_list if (fx, fy) in self.pos_to_idx),
+                default=0
+            )
+            # new_idx es el número de estado i donde Pacman terminaría si  tomara la acción a evaluar.
+            # self.pos_to_idx[(fx, fy)] es el número de estado j donde se encuentra la comida.
+            # self.dist_matrix[...] es la consulta a la memoria de complejidad O(1) para medir la distancia precomputada.
+            # usamos min para minimizar esa distancia.
 
             # Evaluamos si hay power-ups.
             powers = successor.get_capsules()
@@ -235,8 +278,15 @@ class MarkovAgent(Agent):
             # Si hay fantasmas normales y hay un poder cercano, incentivamos que use el poder.
             if powers and normal_ghost_index:
 
-                # Distancia Manhattan mínima de los poderes.
-                minimum_power_dist = min(abs(new_pos[0] - px) + abs(new_pos[1] - py) for px, py in powers)
+                # D̶i̶s̶t̶a̶n̶c̶i̶a̶ ̶M̶a̶n̶h̶a̶t̶t̶a̶n̶ ̶m̶í̶n̶i̶m̶a̶ ̶d̶e̶ ̶l̶o̶s̶ ̶p̶o̶d̶e̶r̶e̶s̶.̶
+                # minimum_power_dist = min(abs(new_pos[0] - px) + abs(new_pos[1] - py) for px, py in powers)
+
+                # Distancia real a la cápsula más cercana (mismo proceso  que antes).
+                minimum_power_dist = min(
+                    (self.distance_matrix[new_idx, self.pos_to_idx[(px, py)]]
+                    for px, py in powers if (px, py) in self.pos_to_idx),
+                    default=0
+                )
 
                 reward_power -= 0.8*minimum_power_dist  # Se la restamos a la recompensa para que busque minimizarla.
 
