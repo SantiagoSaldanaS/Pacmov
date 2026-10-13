@@ -35,7 +35,7 @@ Precomputamos las potencias $P^2$ y $P^3$ al inicializar el juego mediante álge
 
 ### Matriz BFS
 
-Al inicio se planteó utilizar la distancia Manhattan; sin embargo, esta no consideraba paredes. Para evitar mínimos locales, calculamos la distancia mínima real sobre el grafo de adyacencia de $P$:
+Al inicio se planteó utilizar la distancia Manhattan, sin embargo, esta no consideraba paredes. Para evitar mínimos locales, calculamos la distancia mínima real sobre el grafo de adyacencia de $P$:
 
 $$d(i, j) = \text{camino más corto de } i \text{ a } j \text{ sobre } S$$
 
