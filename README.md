@@ -34,9 +34,13 @@ $$P_{ij}^{(m)} = \left(P^m\right)_{ij}$$
 Precomputamos las potencias $P^2$ y $P^3$ al inicializar el juego mediante álgebra matricial vectorizada (`numpy`) (para reducir el costo computacional durante el ciclo de ejecución real).
 
 ### Matriz BFS
-Al inicio se planteó utilizar la distancia Manhattan, sin embargo esta no consideraba paredes. Para evitar mínimos locales, calculamos la distancia mínima real sobre el grafo de adyacencia de $P$:
+
+Al inicio se planteó utilizar la distancia Manhattan; sin embargo, esta no consideraba paredes. Para evitar mínimos locales, calculamos la distancia mínima real sobre el grafo de adyacencia de $P$:
+
 $$d(i, j) = \text{camino más corto de } i \text{ a } j \text{ sobre } S$$
-Utilizamos Breadth-First Search (BFS) para calcular todos los pares de estados en la etapa de preprocesamiento ($O(\vert{}S\vert{} \cdot (\vert{}V\vert{} + \vert{}E\vert{}))$).
+
+Utilizamos Breadth-First Search (BFS) para calcular todos los pares de estados en la etapa de preprocesamiento, con una complejidad temporal de $\mathcal{O}(|S| \cdot (|V| + |E|))$.
+
 
 ### Función de Utilidad y Valor Esperado ($\mathbb{E}[U]$)
 Para cada acción legal $a \in \mathcal{A}$, el agente simula el estado sucesor y selecciona la acción que maximiza el valor esperado:
